@@ -18,7 +18,7 @@ user_socket.sendall(test_hello)
 
 
 data = user_socket.recv(4096).decode("utf-8")
-print("server" + data)
+print("server: " + data)
 
 if data == "IN-USE\n":
     new_name = input("new username: ")
