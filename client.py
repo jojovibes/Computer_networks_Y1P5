@@ -17,7 +17,7 @@ print(handshake + username + newline)
 sock.sendall(handshake + username + newline)
 print(sock.recv(4096))
 
-data = sock.recv(4096)
+data = sock.recv(4096).decode()
 
 if not data:
     print("Socket is closed.")
