@@ -18,6 +18,7 @@ user_socket.sendall(test_hello)
 print ("server:", user_socket.recv(4096))
 
 who = "WHO\n".encode("utf-8")
+send = 
 
 while True:
         my_message = input("send: ")
@@ -28,6 +29,9 @@ while True:
 
         if(my_message == "!who"):
             user_socket.sendall(who)
+        
+        if(my_message[0] == "@"):
+            
 
         print ("server:", user_socket.recv(4096))
 user_socket.close()
