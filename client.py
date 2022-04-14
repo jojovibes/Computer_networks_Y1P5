@@ -29,6 +29,7 @@ if data == "IN-USE\n":
     data = user_socket.recv(4096) 
 
 who = "WHO\n".encode("utf-8")
+message_send = "SEND".encode("utf-8")
 
 while True:
         my_message = input("send: ")
@@ -40,6 +41,12 @@ while True:
         if(my_message == "!who"):
             user_socket.sendall(who)
 
+        if(my_message[0] == "@"):
+            empty = my_message.index('')
+            message_username = my_message[0:empty]
+            message_content = my_message[empty:-1]
+            send = message_send + message_username + message_content + newline
+            user_socket.sendall(send)
 
-        print ("server:", user_socket.recv(4096))
+        print("server:", user_socket.recv(4096))
 user_socket.close()
