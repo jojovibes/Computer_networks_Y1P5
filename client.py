@@ -11,4 +11,4 @@ data = sock.recv(4096)
 if not data:
     print("Socket is closed.")
 else:
-print("Socket has data.")
+    print("Socket has data.")
