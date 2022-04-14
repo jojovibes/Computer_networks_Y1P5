@@ -23,5 +23,15 @@ if not data:
     print("Socket is closed.")
 else:
     print("Socket has data.")
+    if data == "IN-USE\n":
+        new_name = input("new username: ")
+        second_username = new_name.encode("utf-8")
+        print((handshake + second_username + newline))
+        sock.sendall(handshake + second_username + newline)
+        print(sock.recv(4096))
+        data = sock.recv(4096)
+    else:
+        sock.close()
 
-sock.close()
+
+
