@@ -23,7 +23,7 @@ print("server: " + data)
 if data == "IN-USE\n":
     new_name = input("new username: ")
     second_username = new_name.encode("utf-8")
-    print((handshake + second_username + newline))
+    #print((handshake + second_username + newline))
     user_socket.sendall(handshake + second_username + newline)
     print(user_socket.recv(4096))
     data = user_socket.recv(4096) 
@@ -38,17 +38,25 @@ while True:
         if(my_message == "quit" or my_message == "Quit"):
             break
 
-        if(my_message == "!who"):
+        elif(my_message == "!who"):
             user_socket.sendall(who)
 
-        if(my_message[0] == "@"):
-            #message_username = my_message[0:empty]
-            #message_content = my_message[empty:-1]
-            #print(message_username)
+        elif(my_message[0] == "@"):
+
+            empty = my_message.index(' ')
+            empty2 = empty + 1
+            message_username = my_message[1:empty]
+            message_content = my_message[empty2:-1]
+
+            message_username = bytes(message_username, 'utf-8')
+            message_content = bytes(message_content, 'utf-8')
             my_message = my_message[1:]
-            my_messagee = my_message.encode("utf-8")
-            send = message_send + my_message + newline
+            
+            my_message = bytes(my_message, 'utf-8')
+            send = message_send + message_username + message_content + newline
             user_socket.sendall(send)
+            
+
 
         print("server:", user_socket.recv(4096))
 user_socket.close()
