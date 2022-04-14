@@ -1,14 +1,17 @@
 import socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-host_port = ("143.47.184.219", 5378)
-sock.connect(host_port)
+IP = ("143.47.184.219")
+PORT = 5378
 
-sock.sendall(b"Hello World")
+my_username = input("username: ")
+user_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+user_socket.connect((IP, PORT))
 
-data = sock.recv(4096)
+username = my_username.encode("utf-8")
 
-if not data:
-    print("Socket is closed.")
-else:
-    print("Socket has data.")
+user_socket.send(username)
+
+my_message = input("")
+user_socket.send(my_message)
+
+user_socket.close()
