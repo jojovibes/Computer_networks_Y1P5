@@ -42,10 +42,12 @@ while True:
             user_socket.sendall(who)
 
         if(my_message[0] == "@"):
-            empty = my_message.index('')
-            message_username = my_message[0:empty]
-            message_content = my_message[empty:-1]
-            send = message_send + message_username + message_content + newline
+
+            #message_username = my_message[0:empty]
+            #message_content = my_message[empty:-1]
+            #print(message_username)
+            my_message = my_message[1:-1]
+            send = message_send + my_message + newline
             user_socket.sendall(send)
 
         print("server:", user_socket.recv(4096))
