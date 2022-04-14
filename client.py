@@ -15,9 +15,9 @@ newline = " \n".encode("utf-8")
 print(handshake + username + newline)
 
 sock.sendall(handshake + username + newline)
-print(sock.recv(4096))
 
 data = sock.recv(4096).decode("utf-8")
+print(data)
 
 if not data:
     print("Socket is closed.")
