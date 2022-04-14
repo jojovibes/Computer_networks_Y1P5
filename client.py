@@ -46,7 +46,7 @@ while True:
             #message_username = my_message[0:empty]
             #message_content = my_message[empty:-1]
             #print(message_username)
-            my_message = my_message[1]
+            my_message = my_message[1:]
             send = message_send + my_message + newline
             user_socket.sendall(send)
 
