@@ -23,7 +23,7 @@ while True:
 
         if(my_message == "quit" or my_message == "Quit"):
             break
-
-        user_socket.sendall(my_message.encode("utf-8"))
-        print ("server:", user_socket.recv(4096))
+        else:
+            user_socket.sendall(my_message.encode("utf-8"))
+            print ("server:", user_socket.recv(4096))
 user_socket.close()
