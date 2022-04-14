@@ -24,4 +24,4 @@ if not data:
 else:
     print("Socket has data.")
 
-socket.close()
+sock.close()
