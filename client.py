@@ -42,11 +42,11 @@ while True:
             user_socket.sendall(who)
 
         if(my_message[0] == "@"):
-
             #message_username = my_message[0:empty]
             #message_content = my_message[empty:-1]
             #print(message_username)
             my_message = my_message[1:]
+            my_messagee = my_message.encode("utf-8")
             send = message_send + my_message + newline
             user_socket.sendall(send)
 
