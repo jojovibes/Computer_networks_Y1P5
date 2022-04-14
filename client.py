@@ -17,13 +17,17 @@ test_hello = handshake + username + newline
 user_socket.sendall(test_hello)
 print ("server:", user_socket.recv(4096))
 
+who = "WHO\n".encode("utf-8")
+
 while True:
         my_message = input("send: ")
         print(my_message)
 
         if(my_message == "quit" or my_message == "Quit"):
             break
-        else:
-            user_socket.sendall(my_message.encode("utf-8"))
-            print ("server:", user_socket.recv(4096))
+
+        if(my_message == "!who"):
+            user_socket.sendall(who)
+
+        print ("server:", user_socket.recv(4096))
 user_socket.close()
