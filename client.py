@@ -1,7 +1,5 @@
-from cgi import test
+
 import socket
-import threading
-import select
 
 
 my_username = input("username: ")
@@ -35,7 +33,7 @@ while True:
         my_message = input("send: ")
         print(my_message)
 
-        if(my_message == "quit" or my_message == "Quit"):
+        if(my_message == "!quit"):
             break
 
         elif(my_message == "!who"):
@@ -48,6 +46,7 @@ while True:
             my_message = bytes(my_message, 'utf-8')
             send = message_send + my_message + newline
             user_socket.sendall(send)
+            print("server:", user_socket.recv(4096))
             
 
         print("server:", user_socket.recv(4096))
