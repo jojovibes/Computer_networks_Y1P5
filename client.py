@@ -1,5 +1,6 @@
 
 import socket
+import select
 
 
 my_username = input("username: ")
@@ -19,35 +20,37 @@ data = user_socket.recv(4096).decode("utf-8")
 print("server: " + data)
 
 if data == "IN-USE\n":
+    user_socket.close()
+    hostport = ("143.47.184.219", 5378)
+    user_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    user_socket.connect(hostport)
     new_name = input("new username: ")
     second_username = new_name.encode("utf-8")
     user_socket.sendall(handshake + second_username + newline)
-    print(user_socket.recv(4096))
-    data = user_socket.recv(4096)
-
+    data = user_socket.recv(4096).decode("utf-8")
+    print("server: " + data)
 
 who = "WHO\n".encode("utf-8")
 message_send = "SEND ".encode("utf-8")
 
 while True:
-        my_message = input("send: ")
-        print(my_message)
+    my_message = input("send: ")
+    print(my_message)
 
-        if(my_message == "!quit"):
-            break
+    if(my_message == "!quit"):
+        break
 
-        elif(my_message == "!who"):
-            user_socket.sendall(who)
+    elif(my_message == "!who"):
+        user_socket.sendall(who)
 
-        elif(my_message[0] == "@"):
+    elif(my_message[0] == "@"):
 
-            my_message = my_message[1:]
+        my_message = my_message[1:]
 
-            my_message = bytes(my_message, 'utf-8')
-            send = message_send + my_message + newline
-            user_socket.sendall(send)
-            print("server:", user_socket.recv(4096))
+        my_message = bytes(my_message, 'utf-8')
+        send = message_send + my_message + newline
+        user_socket.sendall(send)
             
 
-        print("server:", user_socket.recv(4096))
+    print("server:", user_socket.recv(4096))
 user_socket.close()
