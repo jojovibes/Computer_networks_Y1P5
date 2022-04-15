@@ -23,11 +23,16 @@ print("server: " + data)
 if data == "IN-USE\n":
     new_name = input("new username: ")
     second_username = new_name.encode("utf-8")
-    #print((handshake + second_username + newline))
     user_socket.sendall(handshake + second_username + newline)
     print(user_socket.recv(4096))
     data = user_socket.recv(4096) 
-
+    if data == "IN-USE\n":
+        new_name = input("new username: ")
+        second_username = new_name.encode("utf-8")
+        user_socket.sendall(handshake + second_username + newline)
+        print(user_socket.recv(4096))
+        data = user_socket.recv(4096) 
+        
 who = "WHO\n".encode("utf-8")
 message_send = "SEND".encode("utf-8")
 
@@ -56,7 +61,6 @@ while True:
             send = message_send + message_username + message_content + newline
             user_socket.sendall(send)
             
-
 
         print("server:", user_socket.recv(4096))
 user_socket.close()
