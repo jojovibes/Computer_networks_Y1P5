@@ -25,10 +25,11 @@ if data == "IN-USE\n":
     second_username = new_name.encode("utf-8")
     user_socket.sendall(handshake + second_username + newline)
     print(user_socket.recv(4096))
-    data = user_socket.recv(4096) 
+    data = user_socket.recv(4096)
+
 
 who = "WHO\n".encode("utf-8")
-message_send = "SEND".encode("utf-8")
+message_send = "SEND ".encode("utf-8")
 
 while True:
         my_message = input("send: ")
@@ -42,19 +43,10 @@ while True:
 
         elif(my_message[0] == "@"):
 
-            empty = my_message.index(' ')
-            empty2 = empty + 1
-            message_username = my_message[1:empty]
-            print("username:" + message_username)
-            message_content = my_message[empty2:]
-            print("content:" + message_content)
-
-            message_username = bytes(message_username, 'utf-8')
-            message_content = bytes(message_content, 'utf-8')
             my_message = my_message[1:]
-            
+
             my_message = bytes(my_message, 'utf-8')
-            send = message_send + message_username + message_content + newline
+            send = message_send + my_message + newline
             user_socket.sendall(send)
             
 
