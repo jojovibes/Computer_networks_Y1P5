@@ -24,8 +24,8 @@ def send():
         my_message = input()
 
         if(my_message == "!quit"):
-            
-            break
+            user_socket.close()
+            return
 
         elif(my_message == "!who"):
             user_socket.sendall(who)
@@ -39,10 +39,9 @@ def send():
             user_socket.sendall(send)
 
        
-
-
         
-def receive(user_socket):
+def receive():
+    global user_socket
     while True:
         data = user_socket.recv(1).decode("utf-8")
         while data[-1] != "\n":
@@ -70,13 +69,12 @@ def receive(user_socket):
 
 
 
-t1 = threading.Thread(target=send,)
-t2 = threading.Thread(target=receive, args = (user_socket, ))
+t2 = threading.Thread(target=receive, args = (), daemon=True)
 
-t1.start()
 t2.start()
 
-t1.join()
-t2.join()
+send()
 
-user_socket.close()
+
+
+
