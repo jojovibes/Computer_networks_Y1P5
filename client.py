@@ -1,66 +1,76 @@
 import socket
+import threading
+
+user_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+hostport = ("143.47.184.219", 5378)
+user_socket.connect(hostport)
 
 my_username = input("username: ")
 username = my_username.encode("utf-8")
-hostport = ("143.47.184.219", 5378)
-
-user_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-user_socket.connect(hostport)
 
 handshake = "HELLO-FROM ".encode("utf-8")
 newline = "\n".encode("utf-8")
+who = "WHO\n".encode("utf-8")
+message_send = "SEND ".encode("utf-8")
 
 test_hello = handshake + username + newline
-print(test_hello)
 user_socket.sendall(test_hello)
-
 
 data = user_socket.recv(4096).decode("utf-8")
 print("server: " + data)
 
-while data == "IN-USE\n":
-    user_socket.close()
-    my_username = input("username: ")
-    username = my_username.encode("utf-8")
-    hostport = ("143.47.184.219", 5378)
+def send():
+    while True:
+        my_message = input("send: ")
 
-    user_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    user_socket.connect(hostport)
+        if(my_message == "!quit"):
+            break
 
-    handshake = "HELLO-FROM ".encode("utf-8")
-    newline = "\n".encode("utf-8")
+        elif(my_message == "!who"):
+            user_socket.sendall(who)
+    
 
-    test_hello = handshake + username + newline
-    user_socket.sendall(test_hello)
+        elif(my_message[0] == "@"):
+
+            my_message = my_message[1:]
+
+            my_message = bytes(my_message, 'utf-8')
+            send = message_send + my_message + newline
+            user_socket.sendall(send)
+        
+def receive(user_socket):
+    while True:
+        data = user_socket.recv(4096).decode("utf-8")
+        
+        while data == "IN-USE\n":
+            user_socket.close()
+            my_username = input("username: ")
+            username = my_username.encode("utf-8")
+            hostport = ("143.47.184.219", 5378)
+
+            user_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            user_socket.connect(hostport)
+
+            handshake = "HELLO-FROM ".encode("utf-8")
+            newline = "\n".encode("utf-8")
+
+            test_hello = handshake + username + newline
+            user_socket.sendall(test_hello)
 
 
-    data = user_socket.recv(4096).decode("utf-8")
-    print("server: " + data)
+            data = user_socket.recv(4096).decode("utf-8")
+
+        print("server: " + data)
 
 
-who = "WHO\n".encode("utf-8")
-message_send = "SEND ".encode("utf-8")
+t1 = threading.Thread(target=send,)
+t2 = threading.Thread(target=receive, args = (user_socket, ))
 
-while True:
-    my_message = input("send: ")
+t1.start()
+t2.start()
 
-    if(my_message == "!quit"):
-        break
-
-    elif(my_message == "!who"):
-        user_socket.sendall(who)
-        print("server:", user_socket.recv(4096).decode("utf-8"))
-
-    elif(my_message[0] == "@"):
-
-        my_message = my_message[1:]
-
-        my_message = bytes(my_message, 'utf-8')
-        send = message_send + my_message + newline
-        user_socket.sendall(send)
-        print("server:", user_socket.recv(4096).decode("utf-8"))
-        socket.timeout(3) 
-        print("server:", user_socket.recv(4096).decode("utf-8"))
+t1.join()
+t2.join()
 
 
 user_socket.close()
