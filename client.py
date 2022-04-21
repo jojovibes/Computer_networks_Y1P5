@@ -21,15 +21,15 @@ print("server: " + data)
 
 def send():
     while True:
-        my_message = input("send: ")
+        my_message = input()
 
         if(my_message == "!quit"):
+            
             break
 
         elif(my_message == "!who"):
             user_socket.sendall(who)
     
-
         elif(my_message[0] == "@"):
 
             my_message = my_message[1:]
@@ -37,10 +37,17 @@ def send():
             my_message = bytes(my_message, 'utf-8')
             send = message_send + my_message + newline
             user_socket.sendall(send)
+
+       
+
+
         
 def receive(user_socket):
     while True:
-        data = user_socket.recv(4096).decode("utf-8")
+        data = user_socket.recv(1).decode("utf-8")
+        while data[-1] != "\n":
+            data += user_socket.recv(1).decode("utf-8")
+       
         
         while data == "IN-USE\n":
             user_socket.close()
@@ -57,10 +64,10 @@ def receive(user_socket):
             test_hello = handshake + username + newline
             user_socket.sendall(test_hello)
 
-
             data = user_socket.recv(4096).decode("utf-8")
 
         print("server: " + data)
+
 
 
 t1 = threading.Thread(target=send,)
@@ -71,6 +78,5 @@ t2.start()
 
 t1.join()
 t2.join()
-
 
 user_socket.close()
